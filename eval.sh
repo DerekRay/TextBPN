@@ -1,7 +1,7 @@
 #!/bin/bash
 ##################### Total-Text ###################################
 # test_size=(640,1024)--cfglib/option
-CUDA_LAUNCH_BLOCKING=1 python eval_textBPN.py --exp_name Totaltext --checkepoch 390 --dis_threshold 0.3 --cls_threshold 0.825 --test_size 640 1024 --gpu 0
+CUDA_LAUNCH_BLOCKING=1 python eval_textBPN.py --exp_name Totaltext --checkepoch 390 --dis_threshold 0.3 --cls_threshold 0.825 --test_size 640 1024 --gpu 2
 
 ###################### CTW-1500 ####################################
 # test_size=(640,1024)--cfglib/option

@@ -260,9 +260,9 @@ class TextDataset(object):
         meta = {
             'image_id': image_id,
             'image_path': image_path,
-            'annotation': points,
-            'n_annotation': length,
-            'label_tag': label_tag,
+            'annotation': points,       #annotation sequence
+            'n_annotation': length,     #point nums in each annotation
+            'label_tag': label_tag,     #annotation label
             'Height': H,
             'Width': W
         }
