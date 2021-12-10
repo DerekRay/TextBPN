@@ -157,8 +157,10 @@ def main(vis_dir_path):
     model = TextNet(is_training=False, backbone=cfg.net)
     model_path = os.path.join(cfg.save_dir, cfg.exp_name,
                               'TextBPN_{}_{}.pth'.format(model.backbone_name, cfg.checkepoch))
+    #model_path = os.path.join(cfg.save_dir, cfg.exp_name, 'TD500_resnet50_200.pth')
 
-    model.load_model(model_path)
+    #model.load_model(model_path)
+    model.load_state_dict(torch.load(model_path))
     model = model.to(cfg.device) # copy to cuda
     model.eval()
     if cfg.cuda:
