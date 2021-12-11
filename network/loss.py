@@ -105,8 +105,8 @@ class TextLoss(nn.Module):
         dis_loss = self.single_image_loss(dis_loss, distance_field)
 
         # # direction field loss
-        # norm_loss, angle_loss = self.loss_calc_flux(fy_preds[:, 2:4, :, :],
-        #                                             direction_field, weight_matrix, tr_mask, train_mask)
+        norm_loss, angle_loss = self.loss_calc_flux(fy_preds[:, 2:4, :, :],
+                                                     direction_field, weight_matrix, tr_mask, train_mask)
 
         # boundary point loss
         point_loss = self.PolyMatchingLoss(py_preds, gt_tags[inds])
@@ -116,18 +116,15 @@ class TextLoss(nn.Module):
             loss = cls_loss + 3.0*dis_loss + norm_loss + angle_loss + loss_b
         else:
             loss_b = 0.1*(torch.sigmoid(torch.tensor((eps - cfg.max_epoch)/cfg.max_epoch))) * point_loss
-            loss = cls_loss + 3.0*dis_loss + loss_b #+ norm_loss + angle_loss
-
+            loss = cls_loss + 3.0*dis_loss + loss_b + norm_loss + angle_loss
         loss_dict = {
             'total_loss': loss,
             'cls_loss': cls_loss,
-            'distance loss': 3.0*dis_loss,
-            # 'dir_loss': norm_loss + angle_loss,
+            'distance_loss': 3.0*dis_loss,
+            'dir_loss': norm_loss + angle_loss,
             'point_loss': loss_b,
-            # 'norm_loss': norm_loss,
-            # 'angle_loss': angle_loss,
-
+            'norm_loss': norm_loss,
+            'angle_loss': angle_loss,
         }
-
         return loss_dict
 

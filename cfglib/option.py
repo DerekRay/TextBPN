@@ -51,8 +51,9 @@ class BaseOptions(object):
         self.parser.add_argument('--lr_adjust', default='fix',
                                  choices=['fix', 'poly'], type=str, help='Learning Rate Adjust Strategy')
         self.parser.add_argument('--stepvalues', default=[], nargs='+', type=int, help='# of iter to change lr')
+        self.parser.add_argument('--step_size', default=50, type=int, help='Period of learning rate decay')
         self.parser.add_argument('--weight_decay', '--wd', default=0., type=float, help='Weight decay for SGD')
-        self.parser.add_argument('--gamma', default=0.1, type=float, help='Gamma update for SGD lr')
+        self.parser.add_argument('--gamma', default=0.9, type=float, help='Gamma update for SGD lr')
         self.parser.add_argument('--momentum', default=0.9, type=float, help='momentum')
         self.parser.add_argument('--batch_size', default=12, type=int, help='Batch size for training')
         self.parser.add_argument('--optim', default='Adam', type=str, choices=['SGD', 'Adam'], help='Optimizer')
