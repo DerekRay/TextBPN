@@ -113,12 +113,12 @@ class TextLoss(nn.Module):
 
         if eps is None:
             loss_b = 0.05*point_loss
-            #loss = cls_loss + 3.0*dis_loss + norm_loss + angle_loss + loss_b
-            loss = cls_loss + 3.0*dis_loss + loss_b #norm_loss + angle_loss
+            loss = cls_loss + 3.0*dis_loss + norm_loss + angle_loss + loss_b
+            #loss = cls_loss + 3.0*dis_loss + loss_b #norm_loss + angle_loss
         else:
             loss_b = 0.1*(torch.sigmoid(torch.tensor((eps - cfg.max_epoch)/cfg.max_epoch))) * point_loss
-            #loss = cls_loss + 3.0*dis_loss + loss_b + norm_loss + angle_loss
-            loss = cls_loss + 3.0*dis_loss + loss_b #+ norm_loss + angle_loss
+            loss = cls_loss + 3.0*dis_loss + loss_b + norm_loss + angle_loss
+            #loss = cls_loss + 3.0*dis_loss + loss_b #+ norm_loss + angle_loss
         loss_dict = {
             'total_loss': loss,
             'cls_loss': cls_loss,
