@@ -19,8 +19,8 @@ parser = argparse.ArgumentParser()
 
 # basic opts
 parser.add_argument('exp_name', type=str, help='Model output directory')
-parser.add_argument('--tr', type=float, default=0.7, help='Recall threshold')
-parser.add_argument('--tp', type=float, default=0.6, help='Precision threshold')
+parser.add_argument('--tr', type=float, default=0.7, help='Recall threshold')       #tr is the ratio that inter_are divide by gt_area
+parser.add_argument('--tp', type=float, default=0.6, help='Precision threshold')    #tr is the ratio that inter_are divide by det_area
 args = parser.parse_args()
 
 """

@@ -186,6 +186,11 @@ def main(vis_dir_path):
     test_loader = data.DataLoader(testset, batch_size=1, shuffle=False, num_workers=cfg.num_workers)
     # Model
     model = TextNet(is_training=True, backbone=cfg.net)
+    #model_path = os.path.join(cfg.save_dir, cfg.exp_name,
+    #                          'TextBPN_{}_{}.pth'.format(model.backbone_name, cfg.checkepoch))
+    #model.load_model(model_path)
+    #model_path = os.path.join(cfg.save_dir, cfg.exp_name, 'Totaltext_resnet51_660.pth')
+    #model = torch.load(model_path)
     # Create the loss criterion
     criterion = TextLoss()
     model = model.to(cfg.device) # copy to cuda
@@ -217,20 +222,23 @@ def main(vis_dir_path):
         scheduler.step()
         model.is_training = False
         model.BPN.is_training = False
-        model.train(False)
         model.eval()
         if cfg.cuda:
             cudnn.benchmark = True
         val_one_epoch(model, test_loader, current_epoch, cfg)
-        if current_epoch % cfg.save_freq == 0:
-            if not os.path.exists(cfg.save_dir):
-                mkdirs(cfg.save_dir)
-            model_path = os.path.join(cfg.save_dir, f"{cfg.exp_name}_{cfg.net}_{current_epoch}.pth")
-            torch.save(model, model_path)
-    if not os.path.exists(cfg.save_dir):
-        mkdirs(cfg.save_dir)
-        model_path = os.path.join(cfg.save_dir, f"{cfg.exp_name}_{cfg.net}_final.pth")
-        torch.save(model, model_path)
+        if not os.path.exists(cfg.save_dir):
+            mkdirs(cfg.save_dir)
+        if current_epoch % cfg.save_freq == 0 or current_epoch == cfg.max_epoch:
+            if current_epoch != cfg.max_epoch:
+                model_path = os.path.join(cfg.save_dir, cfg.exp_name, f"{cfg.exp_name}_{cfg.net}_{current_epoch}.pth")
+            else:
+                model_path = os.path.join(cfg.save_dir, cfg.exp_name, f"{cfg.exp_name}_{cfg.net}_final.pth")
+            checkpoints = {
+                'epoch': epoch,
+                'model': model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+            }
+            torch.save(checkpoints, model_path)
     print("Training End")
 
 def train_one_epoch(model, optimizer, scheduler, train_loader, criterion, losses_meters, current_epoch):
@@ -283,8 +291,13 @@ def val_one_epoch(model, test_loader, current_epoch, cfg):
         torch.cuda.synchronize()
         output_dict = model(input_dict)
         idx = 0  # test mode can only run with batch_size == 1
-        print('detect {} / {} images: {}.'.format(i + 1, len(test_loader), meta['image_id'][idx]))
+        #print('detect {} / {} images: {}.'.format(i + 1, len(test_loader), meta['image_id'][idx]))
+        # visualization
+        img_show = image[idx].permute(1, 2, 0).cpu().numpy()
+        img_show = ((img_show * cfg.stds + cfg.means) * 255).astype(np.uint8)
         contours = output_dict["py_preds"][-1].int().cpu().numpy()
+        H, W = meta['Height'][idx].item(), meta['Width'][idx].item()
+        img_show, contours = rescale_result(img_show, contours, H, W)
         # write to file
         if cfg.exp_name == "Icdar2015":
             fname = "res_" + meta['image_id'][idx].replace('jpg', 'txt')
