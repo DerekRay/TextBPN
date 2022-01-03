@@ -155,9 +155,9 @@ def main(vis_dir_path):
 
     # Model
     model = TextNet(is_training=False, backbone=cfg.net)
-    model_path = os.path.join(cfg.save_dir, cfg.exp_name,
-                              'TextBPN_{}_{}.pth'.format(model.backbone_name, cfg.checkepoch))
-    #model_path = os.path.join(cfg.save_dir, cfg.exp_name, 'Totaltext_resnet50_660.pth')
+    #model_path = os.path.join(cfg.save_dir, cfg.exp_name,
+    #                          'TextBPN_{}_{}.pth'.format(model.backbone_name, cfg.checkepoch))
+    model_path = os.path.join(cfg.save_dir, cfg.exp_name, 'Totaltext_resnet50_final.pth')
 
     model.load_model(model_path)
     #model.load_state_dict(torch.load(model_path))
