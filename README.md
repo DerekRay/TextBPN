@@ -43,7 +43,28 @@ CUDA_LAUNCH_BLOCKING=1 python eval_textBPN.py --exp_name Totaltext --checkepoch 
 #CUDA_LAUNCH_BLOCKING=1 python eval_textBPN.py --exp_name TD500 --checkepoch 680 --dis_threshold 0.3 --cls_threshold 0.925 --test_size 640 1024 --gpu 1
 
 ```  
-## 5.Experiments results
+## 5.Train
+run:  
+```
+sh train.sh
+```
+The details are as follows:  
+```
+#!/bin/bash
+##################### Total-Text ###################################
+# test_size=(640,1024)--cfglib/option
+#CUDA_LAUNCH_BLOCKING=1 python train_textBPN.py --exp_name Totaltext --checkepoch 390 --save_freq 10 --dis_threshold 0.3 --cls_threshold 0.825 --test_size 640 1024 --gpu 0
+CUDA_LAUNCH_BLOCKING=1 python train_textBPN.py --exp_name Totaltext --max_epoch 660 --checkepoch 390 --save_freq 60 --dis_threshold 0.3 --cls_threshold 0.825 --test_size 640 1024 --gpu 1
+
+###################### CTW-1500 ####################################
+# test_size=(640,1024)--cfglib/option
+# CUDA_LAUNCH_BLOCKING=1 python eval_textBPN.py --exp_name Ctw1500 --checkepoch 560 --dis_threshold 0.3 --cls_threshold 0.8 --test_size 640 1024 --gpu 1
+
+#################### MSRA-TD500 ######################################
+# test_size=(640,1024)--cfglib/option
+#CUDA_LAUNCH_BLOCKING=1 python eval_textBPN.py --exp_name TD500 --checkepoch 680 --dis_threshold 0.3 --cls_threshold 0.925 --test_size 640 1024 --gpu 2
+```
+## 6.Experiments results
 ![](https://github.com/GXYM/TextBPN/blob/main/vis/2.png)
 ![](https://github.com/GXYM/TextBPN/blob/main/vis/3.png)
 
